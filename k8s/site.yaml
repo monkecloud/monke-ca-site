@@ -24,7 +24,7 @@ spec:
         - name: app
           # CI rewrites this tag on every push. Never `:latest` — the tag is how rollback
           # works, and a moving tag means a restarted pod silently changes version.
-          image: ghcr.io/monkecloud/monke-ca-site:REPLACE-ME
+          image: ghcr.io/monkecloud/monke-ca-site:787ae04
           ports:
             - containerPort: 8080
           # No env and no imagePullSecrets: this site talks to nothing, and the GHCR package
