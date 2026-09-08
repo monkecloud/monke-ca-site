@@ -1,0 +1,70 @@
+# What actually runs. This file is the source of truth: Flux applies it, so the cluster
+# matches the repo and nothing is configured by hand.
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: monke-ca
+  labels: { app: monke-ca }
+spec:
+  replicas: 2
+  selector:
+    matchLabels: { app: monke-ca }
+  template:
+    metadata:
+      labels: { app: monke-ca }
+    spec:
+      # One replica per node, so losing a node cannot take the app down.
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - labelSelector:
+                matchLabels: { app: monke-ca }
+              topologyKey: kubernetes.io/hostname
+      containers:
+        - name: app
+          # CI rewrites this tag on every push. Never `:latest` — the tag is how rollback
+          # works, and a moving tag means a restarted pod silently changes version.
+          image: ghcr.io/monkecloud/monke-ca-site:REPLACE-ME
+          ports:
+            - containerPort: 8080
+          # No env and no imagePullSecrets: this site talks to nothing, and the GHCR package
+          # is public. It is the whole point of baking content into the image.
+          readinessProbe:
+            httpGet: { path: /, port: 8080 }
+            initialDelaySeconds: 2
+            periodSeconds: 10
+          livenessProbe:
+            httpGet: { path: /, port: 8080 }
+            initialDelaySeconds: 10
+            periodSeconds: 20
+          securityContext:
+            runAsNonRoot: true
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop: [ALL]
+            seccompProfile:
+              type: RuntimeDefault
+          resources:
+            requests: { cpu: 20m, memory: 32Mi }
+            limits: { cpu: 200m, memory: 128Mi }
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: monke-ca
+spec:
+  selector: { app: monke-ca }
+  ports:
+    - port: 80
+      targetPort: 8080
+---
+# Required by the two-replica pattern: without it a node drain can take both replicas at
+# once. Drop it if you ever run a single replica, where minAvailable: 1 blocks every drain.
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: monke-ca
+spec:
+  minAvailable: 1
+  selector:
+    matchLabels: { app: monke-ca }
