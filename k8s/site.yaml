@@ -20,6 +20,10 @@ spec:
             - labelSelector:
                 matchLabels: { app: monke-ca }
               topologyKey: kubernetes.io/hostname
+      # The GHCR package is private, so the pull needs credentials. The Secret is applied
+      # from the infra repo, not from here — an app repo holds no credentials.
+      imagePullSecrets:
+        - name: ghcr-creds
       containers:
         - name: app
           # CI rewrites this tag on every push. Never `:latest` — the tag is how rollback
@@ -27,8 +31,8 @@ spec:
           image: ghcr.io/monkecloud/monke-ca-site:787ae04
           ports:
             - containerPort: 8080
-          # No env and no imagePullSecrets: this site talks to nothing, and the GHCR package
-          # is public. It is the whole point of baking content into the image.
+          # No env: this site talks to nothing. It is the whole point of baking content
+          # into the image.
           readinessProbe:
             httpGet: { path: /, port: 8080 }
             initialDelaySeconds: 2
