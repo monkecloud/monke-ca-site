@@ -1,0 +1,53 @@
+a {
+    /* color: #8ef; */
+    color: #0cf;
+    text-decoration: underline;
+}
+
+a::before,
+a::after {
+    color: yellow;
+    content: "\00a0";
+    animation: fade 0.8 ease-out forwards;
+}
+
+a:focus {
+    outline: none;
+}
+
+@keyframes fade {
+    to {
+        transform: scale(0);
+        opacity: 0;
+    }
+
+    from {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+@keyframes pulse {
+    0%,
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+
+    50% {
+        transform: scale(0);
+        opacity: 0;
+    }
+}
+
+a:hover::after,
+a:focus::after {
+    content: "]";
+    animation: pulse 0.7s ease-in-out infinite;
+}
+
+a:hover::before,
+a:focus::before {
+    content: "[";
+    animation: pulse 0.7s ease-in-out infinite;
+}

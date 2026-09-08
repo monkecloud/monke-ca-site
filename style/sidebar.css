@@ -1,0 +1,108 @@
+aside {
+    position: sticky;
+    align-self: flex-start;
+    top: 0;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100vh;
+    width: var(--sidebar-width);
+
+    z-index: 1;
+
+    font-family: Verdana, sans-serif;
+
+    /* background-color: #0cf; */
+    background: repeating-linear-gradient(
+        45deg,          /* angle: 45° gives diagonal */
+        #0cf,           /* stripe color 1 */
+        #0cf 15px,      /* thickness of stripe */
+        #ff0 15px,      /* stripe color 2 starts */
+        #ff0 30px       /* thickness of stripe */
+    );
+
+    opacity: var(--sidebar-opacity, 1);
+    transition: opacity 0.5s linear;
+}
+
+aside:hover {
+    opacity: 1;
+}
+
+aside > h1 {
+    writing-mode: vertical-rl;
+    text-orientation: sideways;
+
+    margin: 1rem 0 0 0;
+
+
+    background-color: #ff0;
+    -webkit-background-clip: text;
+    background-clip: text;
+    mix-blend-mode: difference;
+    color: transparent;
+
+    font-size: clamp(64px, 18vh, 128px);
+    font-style: italic;
+    font-weight: bold;
+
+    flex: 1;
+    display: flex;
+    /* align-items: center; */
+    /* justify-content: center; */
+}
+
+aside > #sidebar-info {
+    width:100%;
+    text-align: center;
+    font-size: 22px;
+    font-style: italic;
+    font-weight: bold;
+    background-color: rgb(255,51,255);
+    color: #fff;
+}
+
+aside > img {
+    width: var(--sidebar-width);
+    flex: 0 0 auto;
+}
+
+/* Responsive: top banner on narrow screens */
+@media (max-width: 768px) {
+    aside {
+        position: relative;
+        align-self: flex-start;
+        top: 0;
+
+        flex-direction: row;
+        height: var(--sidebar-width);
+        width: 100%;
+        align-items: center;
+    }
+
+    aside > h1 {
+        font-size: clamp(32px, 15vw, 128px);
+        writing-mode: horizontal-tb; /* normal text orientation */
+        text-orientation: initial;
+        margin: 0 0 0 1rem;              /* some spacing */
+        flex: 1;                      /* take remaining width */
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;  /* align left */
+    }
+
+    aside > #sidebar-info{
+        writing-mode: vertical-lr;
+        text-orientation: sideways;
+        height: 100%;
+        width: auto;
+    }
+
+    aside > img {
+        width: var(--sidebar-width);                /* fit top banner height */
+        height: var(--sidebar-width);                /* fit top banner height */
+        flex: 0 0 auto;
+    }
+}
+

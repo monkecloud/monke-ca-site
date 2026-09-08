@@ -1,0 +1,47 @@
+@font-face {
+  font-family: "VGA";
+  src: url("../assets/IBMVGA8.woff") format("woff");
+  font-weight: normal;
+}
+
+body,
+html {
+    background-color: rgb(26,26,20);
+    color: #fff;
+
+    /*
+    font-family: monospace;
+    font-size: 14px;
+    */
+
+    font-family: "Space Mono", monospace;
+    font-size: 18px;
+    font-weight: 500;
+    font-style: normal;
+
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+}
+
+.layout {
+    display: flex;
+    min-height: 100vh;
+    flex-direction: row;
+}
+
+#frog-corner {
+    -webkit-user-select: none;
+    user-select: none;
+    color: #ff0;
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    margin: 0 0.5rem 0.25rem 0;
+}
+
+@media (max-width: 768px) {
+    .layout {
+        flex-direction: column;
+    }
+}

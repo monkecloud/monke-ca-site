@@ -1,0 +1,13 @@
+@import url('index.css');
+@import url('a.css');
+@import url('sidebar.css');
+@import url('main.css');
+
+:root {
+    --sidebar-width: 140px;
+    --width-limit: 768px;
+}
+
+main {
+    width: 100%;
+}
